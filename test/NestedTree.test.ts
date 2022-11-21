@@ -388,7 +388,7 @@ describe( 'Nested tree node tests', () =>
 		expect( child3.nextSibling() ).toBeNull();
 	} );
 
-	test( 'Move node (change parent)', () =>
+	test( 'Move node (change parent) with append', () =>
 	{
 		const root = new NestedTreeNode();
 		const child1 = new NestedTreeNode();
@@ -422,6 +422,70 @@ describe( 'Nested tree node tests', () =>
 		expect( child2.left ).toBe( 5 );
 		expect( child2.right ).toBe( 6 );
 		expect( child3.left ).toBe( 7 );
+		expect( child3.right ).toBe( 8 );
+		expect( root.right ).toBe( 9 );
+
+		child3.append( subchild );
+
+		expect( root.left ).toBe( 0 );
+		expect( child1.left ).toBe( 1 );
+		expect( child1.right ).toBe( 2 );
+		expect( child2.left ).toBe( 3 );
+		expect( child2.right ).toBe( 4 );
+		expect( child3.left ).toBe( 5 );
+		expect( subchild.left ).toBe( 6 );
+		expect( subchild.right ).toBe( 7 );
+		expect( child3.right ).toBe( 8 );
+		expect( root.right ).toBe( 9 );
+	} );
+
+	test( 'Move node (change parent) with prepend', () =>
+	{
+		const root = new NestedTreeNode();
+		const child1 = new NestedTreeNode();
+		const child2 = new NestedTreeNode();
+		const subchild = new NestedTreeNode();
+		const child3 = new NestedTreeNode();
+
+		root
+			.append( child1 )
+			.append( child2.append( subchild ) )
+			.append( child3 );
+
+		expect( root.left ).toBe( 0 );
+		expect( child1.left ).toBe( 1 );
+		expect( child1.right ).toBe( 2 );
+		expect( child2.left ).toBe( 3 );
+		expect( subchild.left ).toBe( 4 );
+		expect( subchild.right ).toBe( 5 );
+		expect( child2.right ).toBe( 6 );
+		expect( child3.left ).toBe( 7 );
+		expect( child3.right ).toBe( 8 );
+		expect( root.right ).toBe( 9 );
+
+		child1.prepend( subchild );
+
+		expect( root.left ).toBe( 0 );
+		expect( child1.left ).toBe( 1 );
+		expect( subchild.left ).toBe( 2 );
+		expect( subchild.right ).toBe( 3 );
+		expect( child1.right ).toBe( 4 );
+		expect( child2.left ).toBe( 5 );
+		expect( child2.right ).toBe( 6 );
+		expect( child3.left ).toBe( 7 );
+		expect( child3.right ).toBe( 8 );
+		expect( root.right ).toBe( 9 );
+
+		child3.prepend( subchild );
+
+		expect( root.left ).toBe( 0 );
+		expect( child1.left ).toBe( 1 );
+		expect( child1.right ).toBe( 2 );
+		expect( child2.left ).toBe( 3 );
+		expect( child2.right ).toBe( 4 );
+		expect( child3.left ).toBe( 5 );
+		expect( subchild.left ).toBe( 6 );
+		expect( subchild.right ).toBe( 7 );
 		expect( child3.right ).toBe( 8 );
 		expect( root.right ).toBe( 9 );
 	} );

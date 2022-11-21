@@ -12,13 +12,7 @@ export class NestedTreeNode
 
 	public append( node: NestedTreeNode ): NestedTreeNode
 	{
-		// If node we are about to include has parent, we have to remove it from its original parent
-		if ( node._parent !== null )
-		{
-			const parent = node._parent;
-
-			parent.removeChild( node );
-		}
+		const removedParent = this.removeParentIfExists( node );
 
 		node._parent = this;
 		node.depth = this._depth + 1;
@@ -40,13 +34,23 @@ export class NestedTreeNode
 
 		this._childrens.push( node );
 
-		node.left = newLeft;
+		if ( removedParent && removedParent._left < newLeft )
+		{
+			// Invoke tree rebuild from where it gets changed
+			removedParent.left = removedParent._left;
+		}
+		else
+		{
+			node.left = newLeft;
+		}
 
 		return this;
 	}
 
 	public prepend( node: NestedTreeNode ): NestedTreeNode
 	{
+		const removedParent = this.removeParentIfExists( node );
+
 		node._parent = this;
 		node.depth = this._depth + 1;
 
@@ -67,9 +71,46 @@ export class NestedTreeNode
 
 		this._childrens.unshift( node );
 
-		node.left = newLeft;
+		if ( removedParent && removedParent._left < newLeft )
+		{
+			// Invoke tree rebuild from where it gets changed
+			removedParent.left = removedParent._left;
+		}
+		else
+		{
+			node.left = newLeft;
+		}
 
 		return this;
+	}
+
+	/**
+	 * Removes node from its parent
+	 * 
+	 * NOTE
+	 * 	Do not rebuild its childrens. Node is in invalid state
+	 * 
+	 * @param node Node to be removed from its parent
+	 * @returns 
+	 */
+	private removeParentIfExists( node: NestedTreeNode ): Nullable<NestedTreeNode>
+	{
+		const { _parent: parent } = node;
+
+		if ( parent === null )
+		{
+			return parent;
+		}
+
+		const { _childrens: childrens } = parent;
+
+		const index = childrens.indexOf( node );
+
+		childrens.splice( index, 1 );
+
+		node._parent = null;
+
+		return parent;
 	}
 
 	private getSibling( which: 'previous' | 'next' ): Nullable<NestedTreeNode>
