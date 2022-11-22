@@ -204,6 +204,18 @@ describe( 'Nested tree node tests', () =>
 		expect( root.right ).toBe( 9 );
 	} );
 
+	test( 'Append / prepend node to itself', () =>
+	{
+		const root = new NestedTreeNode();
+		const child = new NestedTreeNode();
+
+		child.append( new NestedTreeNode() ).append( new NestedTreeNode() );
+		root.append( child );
+
+		expect( () => child.append( child ) ).toThrow();
+		expect( () => child.prepend( child ) ).toThrow();
+	} );
+
 	test( 'Remove only child', () =>
 	{
 		const root = new NestedTreeNode();
