@@ -15,7 +15,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: |
-          npm version ${GITHUB_REF#refs\/tags\/v} --no-git-tag-version --allow-same-version && \
+          npm version ${{ github.event.release.tag_name }} --no-git-tag-version --allow-same-version && \
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
