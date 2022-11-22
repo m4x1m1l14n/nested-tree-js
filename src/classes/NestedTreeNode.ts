@@ -12,6 +12,11 @@ export class NestedTreeNode
 
 	public append( node: NestedTreeNode ): NestedTreeNode
 	{
+		if ( node === this )
+		{
+			throw new Error( 'Cannot append node to itself' );
+		}
+
 		const removedParent = this.removeParentIfExists( node );
 
 		node._parent = this;
@@ -49,6 +54,11 @@ export class NestedTreeNode
 
 	public prepend( node: NestedTreeNode ): NestedTreeNode
 	{
+		if ( node === this )
+		{
+			throw new Error( 'Cannot prepend node to itself' );
+		}
+
 		const removedParent = this.removeParentIfExists( node );
 
 		node._parent = this;
