@@ -1,6 +1,6 @@
 {
 	"name": "@m4x1m1l14n/nested-tree",
-	"version": "1.0.0-alpha.0",
+	"version": "1.0.0-alpha.1",
 	"description": "",
 	"main": "dist/main.js",
 	"types": "dist/main.d.ts",
