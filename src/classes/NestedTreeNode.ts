@@ -94,6 +94,35 @@ export class NestedTreeNode
 		return this;
 	}
 
+	public clone(): this
+	{
+		return this.cloneHelper();
+	}
+
+	protected cloneHelper<T extends this>( this: T ): T
+	{
+		const clone = new ( this.constructor as { new(): T } )();
+
+		const exclude = [ '_childrens', '_parent', '_depth', '_left', '_right' ];
+
+		for ( const prop in this )
+		{
+			if ( exclude.includes( prop ) )
+			{
+				continue;
+			}
+
+			clone[prop] = this[prop];
+		}
+
+		for ( const children of this._childrens )
+		{
+			clone.append( children.clone() );
+		}
+
+		return clone;
+	}
+
 	/**
 	 * Removes node from its parent
 	 * 
